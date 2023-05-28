@@ -10,6 +10,7 @@ SRCS = ./src/main.S
 FLAGS = -mthumb
 FLAGS += -mcpu=cortex-m4
 FLAGS += -mfloat-abi=hard -mfpu=fpv4-sp-d16
+FLAGS += -g
 
 compile:
 	arm-none-eabi-as $(FLAGS) $(SRCS) $(STARTUP) -o $(BUILD_DIR)/$(PROJ_NAME).o -w

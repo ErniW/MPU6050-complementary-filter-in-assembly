@@ -1,2 +1,13 @@
 # MPU6050-complementary-filter-in-assembly
-Computes MPU 6050 IMU angles by using complementary filter algorithm written purely in ARM assembly.
+
+### Devices required:
+- STM32F446RE or anything compatible.
+- MPU6050 6-axis IMU
+
+### Compile & upload
+Type `make compile upload`. But before doing this change STLink directory.
+
+### What's covered?
+- UART interface
+- I2C interface
+- IMU algorithm

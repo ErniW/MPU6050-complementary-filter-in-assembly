@@ -2,8 +2,7 @@
 .thumb
 
 .include "includes/main.inc"
-.include "includes/uart.inc"
-.include "includes/i2c.inc"
+.include "includes/mpu_6050.inc"
 
 .include "src/utils.S"
 .include "src/uart.S"
@@ -17,29 +16,50 @@
 .thumb_func
 main:
 
-    ldr r0, =RCC_AHB1ENR
-    ldr r1, [r0]
-    orr r1, GPIOA_EN 
-    str r1, [r0]
-    
+    ldr REG, =RCC_AHB1ENR
+    mov BIT, GPIOA_EN | GPIOB_EN
+    bl  bit_set
+
     bl  uart_init
     bl  i2c_init
 
+    //bl i2c_write
+
+    /*
+    mov I2C_DEVICE_ADDR, MPU6050_ADDRESS
+    mov I2C_REGISTER_ADDR, MPU6050_RESET
+    mov I2C_DATA, 0x00
+    bl i2c_write
+    */
+/*
+    mov I2C_DEVICE_ADDR, MPU6050_ADDRESS
+    mov I2C_REGISTER_ADDR, MPU6050_ACCEL_CONFIG
+    mov I2C_DATA, 0x00
+    bl i2c_write
+
+    mov I2C_DEVICE_ADDR, MPU6050_ADDRESS
+    mov I2C_REGISTER_ADDR, MPU6050_GYRO_CONFIG
+    mov I2C_DATA, 0x00
+    bl i2c_write
+    */
+    
+
 loop:
+
     mov r0, #'T'
-    bl  uart_write
+    bl  uart_write_char
 
     mov	r0, #'E'
-    bl  uart_write
+    bl  uart_write_char
 
     mov r0, #'S'
-    bl  uart_write
+    bl  uart_write_char
 
     mov r0, #'T'
-    bl  uart_write
+    bl  uart_write_char
 
     mov r0, #'\n'
-    bl  uart_write
+    bl  uart_write_char
 
     b   loop
 
@@ -51,41 +71,12 @@ loop:
 .section .data
 
 
-
-/*
-.thumb_func
-main:
-   
-    ldr     r0, =RCC_AHB1ENR
-    ldr     r1, [r0]
-    orr     r1, GPIOA_EN
-    str     r1, [r0]
-
-    ldr     r0, =GPIOA_MODER
-    ldr     r1, [r0]
-    orr     r1, MODER5_OUT
-    str     r1, [r0]
-
-    mov     r1, 0
-    ldr     r2, =GPIOA_ODR
-
-
-Blink:
-
-    eor     r1, LED_ON
-    str     r1, [r2]
-    ldr     r3, =INTERVAL
-    bl      Delay
-    b       Blink
-
-
-Delay:
-
-    subs    r3, r3, 1
-    bne     Delay
-    bx      lr
-
-
-    .align
-    .end
-*/
+.section .bss
+.align 4
+    tmp: .word
+    accx: .word
+    accy: .word
+    accz: .word
+    gyrox: .word
+    gyroy: .word
+    gyroz: .word
