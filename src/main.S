@@ -3,8 +3,11 @@
 
 .include "includes/main.inc"
 .include "includes/uart.inc"
+.include "includes/i2c.inc"
 
+.include "src/utils.S"
 .include "src/uart.S"
+.include "src/i2c.S"
 
 .section .text
 
@@ -15,26 +18,12 @@
 main:
 
     ldr r0, =RCC_AHB1ENR
-    ldr r1, =RCC_APB1ENR
-    ldr r2, =GPIOA_MODER
-    ldr r3, =GPIOA_AFR1
+    ldr r1, [r0]
+    orr r1, GPIOA_EN 
+    str r1, [r0]
     
-    ldr r4, [r0]
-    ldr r5, [r1]
-    ldr r6, [r2]
-    ldr r7, [r3]
-
-    orr r4, GPIOA_EN
-    orr r5, RCC_USART2_EN
-    orr r6, PA2_AF_MODE
-    orr r7, PA2_AF_USART2_TX
-
-    str r4, [r0]
-    str r5, [r1]
-    str r6, [r2]
-    str r7, [r3]
-
     bl  uart_init
+    bl  i2c_init
 
 loop:
     mov r0, #'T'
@@ -56,6 +45,12 @@ loop:
 
     .align
     .end
+
+
+
+.section .data
+
+
 
 /*
 .thumb_func
