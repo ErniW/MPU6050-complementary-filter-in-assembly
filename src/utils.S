@@ -12,21 +12,21 @@ STATUS_REG .req r1
 FLAG .req r2
 
 wait_for_flag_set:
-    push {lr}
+   // push {lr}
     ldr r3, [STATUS_REG]
     and r3, r3, FLAG
     cmp r3, #0
     beq wait_for_flag_set
-    pop {lr}
+    //pop {lr}
     bx lr
 
 wait_for_flag_clear:
-    push {lr}
+    //push {lr}
     ldr r3, [STATUS_REG]
     and r3, r3, FLAG
     cmp r3, #0
     bne wait_for_flag_clear
-    pop {lr}
+    // pop {lr}
     bx lr
 
 /*
