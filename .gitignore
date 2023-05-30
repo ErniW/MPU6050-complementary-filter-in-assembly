@@ -1,2 +1,4 @@
 STLink/
-src/backupi2c.S
+build/MPU6050_IMU.bin
+build/MPU6050_IMU.elf
+build/MPU6050_IMU.o

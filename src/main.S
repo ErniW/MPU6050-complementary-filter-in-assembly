@@ -4,7 +4,6 @@
 .include "includes/main.inc"
 .include "includes/mpu_6050.inc"
 
-
 .include "src/utils.S"
 .include "src/uart.S"
 .include "src/i2c.S"
@@ -13,23 +12,19 @@
 .align 4
 
     i2c_buffer: .word 0, 1, 2, 3, 4, 5
+    accx: .hword 0
+    accy: .hword 0
+    accz: .hword 0
+    gyrox: .hword 0
+    gyroy: .hword 0
+    gyroz: .hword 0
 
 .section .bss
 .align 4
 
-    tmp: .word
-    accx: .word
-    accy: .word
-    accz: .word
-    gyrox: .word
-    gyroy: .word
-    gyroz: .word
-
-
+    tmp: .word 0
 
 .section .text
-
-
 
 .globl  main
 .word   main
@@ -69,14 +64,45 @@ loop:
     bl i2c_read
 
     ldr r0, =i2c_buffer
+    ldr r1, =accx
+    
+    ldr r2, [r0]
+    ldr r3, [r0, #4]
 
-    ldr r1, [r0]
-    ldr r2, [r0, #4]
-    ldr r3, [r0, #8] 
-    ldr r4, [r0, #12]
-    ldr r5, [r0, #16]
-    ldr r6, [r0, #20]
+    lsl r2, r2, #8
+    orr r2, r2, r3
+    sxth r2, r2
+    strh r2, [r1]
 
+    ldr r0, =i2c_buffer
+    ldr r1, =accy
+    
+    ldr r2, [r0, #8]
+    ldr r3, [r0, #12]
+
+    lsl r2, r2, #8
+    orr r2, r2, r3
+    sxth r2, r2
+    strh r2, [r1]
+
+    ldr r0, =i2c_buffer
+    ldr r1, =accz
+    
+    ldr r2, [r0, #16]
+    ldr r3, [r0, #20]
+
+    lsl r2, r2, #8
+    orr r2, r2, r3
+    sxth r2, r2
+    strh r2, [r1]
+
+    ldr r0, =accx
+    ldr r2, =accy
+    ldr r4, =accz
+
+    ldrsh r1, [r0]
+    ldrsh r3, [r2]
+    ldrsh r5, [r4]
 
     mov r0, #'T'
     bl  uart_write_char
