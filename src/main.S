@@ -64,77 +64,38 @@ loop:
     bl i2c_read
 
     ldr r0, =i2c_buffer
+
     ldr r1, =accx
-    
-    ldr r2, [r0]
-    ldr r3, [r0, #4]
+    mov r2, #0
+    bl concat_i2c_buffer_to_number
 
-    lsl r2, r2, #8
-    orr r2, r2, r3
-    sxth r2, r2
-    strh r2, [r1]
-
-    ldr r0, =i2c_buffer
     ldr r1, =accy
-    
-    ldr r2, [r0, #8]
-    ldr r3, [r0, #12]
+    mov r2, #8
+    bl concat_i2c_buffer_to_number
 
-    lsl r2, r2, #8
-    orr r2, r2, r3
-    sxth r2, r2
-    strh r2, [r1]
-
-    ldr r0, =i2c_buffer
     ldr r1, =accz
-    
-    ldr r2, [r0, #16]
-    ldr r3, [r0, #20]
-
-    lsl r2, r2, #8
-    orr r2, r2, r3
-    sxth r2, r2
-    strh r2, [r1]
-
+    mov r2, #16
+    bl concat_i2c_buffer_to_number
 
 
     mov I2C_DEVICE_ADDR, MPU6050_ADDRESS
-    mov I2C_REGISTER_ADDR, MPU6050_READ_ACCEL
+    mov I2C_REGISTER_ADDR, MPU6050_READ_GYRO
     mov I2C_DATA_LENGTH, 6
     bl i2c_read
 
     ldr r0, =i2c_buffer
+
     ldr r1, =gyrox
-    
-    ldr r2, [r0]
-    ldr r3, [r0, #4]
+    mov r2, #0
+    bl concat_i2c_buffer_to_number
 
-    lsl r2, r2, #8
-    orr r2, r2, r3
-    sxth r2, r2
-    strh r2, [r1]
-
-    ldr r0, =i2c_buffer
     ldr r1, =gyroy
-    
-    ldr r2, [r0, #8]
-    ldr r3, [r0, #12]
+    mov r2, #8
+    bl concat_i2c_buffer_to_number
 
-    lsl r2, r2, #8
-    orr r2, r2, r3
-    sxth r2, r2
-    strh r2, [r1]
-
-    ldr r0, =i2c_buffer
     ldr r1, =gyroz
-    
-    ldr r2, [r0, #16]
-    ldr r3, [r0, #20]
-
-    lsl r2, r2, #8
-    orr r2, r2, r3
-    sxth r2, r2
-    strh r2, [r1]
+    mov r2, #16
+    bl concat_i2c_buffer_to_number
 
     mov r0, #'A'
     bl  uart_write_char
@@ -192,9 +153,5 @@ loop:
     
     b   loop
 
-    .align
-    .end
-
-
-
-
+.align
+.end

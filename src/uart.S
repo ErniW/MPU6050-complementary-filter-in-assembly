@@ -44,30 +44,19 @@ uart_write_char:
 uart_write_digit:
     push {lr}
 
-    /*
-        1. sprawdź czy liczba jest ujemna
-        2. wyślij znak minus
-        3. skasuj minus z liczby rsb?
-        4. Pętla która zachowuje w stacku cyfry
-        5. Pętla która drukuje z stacka (by odwrócić)
-
-        r4 - variable
-
-    */
-
     cmp r4, #0
     bge positive_number
+
     mov r0, #'-'
     bl uart_write_char
     rsbs r4, r4, #0
 
     positive_number:
+        mov r0, r4 
         mov r1, #10
         mov r6, #0
-        mov r0, r4 
 
     convert_digit_loop:
-       
         udiv r3, r0, r1
         mov r5, r3
         mul r3, r3, r1
@@ -89,3 +78,4 @@ uart_write_digit:
 
     pop {lr}
     bx lr
+    
