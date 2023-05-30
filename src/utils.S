@@ -13,6 +13,7 @@ FLAG .req r2
 wait_for_flag_set:
 
     ldr r3, [STATUS_REG]
+    //użyć tst?
     and r3, r3, FLAG
     cmp r3, #0
     beq wait_for_flag_set

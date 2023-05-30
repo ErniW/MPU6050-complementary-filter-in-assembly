@@ -22,7 +22,7 @@
 .section .bss
 .align 4
 
-    tmp: .word 0
+    tmp: .word
 
 .section .text
 
@@ -96,29 +96,100 @@ loop:
     sxth r2, r2
     strh r2, [r1]
 
+
+
+    mov I2C_DEVICE_ADDR, MPU6050_ADDRESS
+    mov I2C_REGISTER_ADDR, MPU6050_READ_ACCEL
+    mov I2C_DATA_LENGTH, 6
+    bl i2c_read
+
+    ldr r0, =i2c_buffer
+    ldr r1, =gyrox
+    
+    ldr r2, [r0]
+    ldr r3, [r0, #4]
+
+    lsl r2, r2, #8
+    orr r2, r2, r3
+    sxth r2, r2
+    strh r2, [r1]
+
+    ldr r0, =i2c_buffer
+    ldr r1, =gyroy
+    
+    ldr r2, [r0, #8]
+    ldr r3, [r0, #12]
+
+    lsl r2, r2, #8
+    orr r2, r2, r3
+    sxth r2, r2
+    strh r2, [r1]
+
+    ldr r0, =i2c_buffer
+    ldr r1, =gyroz
+    
+    ldr r2, [r0, #16]
+    ldr r3, [r0, #20]
+
+    lsl r2, r2, #8
+    orr r2, r2, r3
+    sxth r2, r2
+    strh r2, [r1]
+
+    mov r0, #'A'
+    bl  uart_write_char
+
+    mov r0, #' '
+    bl  uart_write_char
+
     ldr r0, =accx
-    ldr r2, =accy
-    ldr r4, =accz
+    ldrsh r4, [r0]
+    bl uart_write_digit
 
-    ldrsh r1, [r0]
-    ldrsh r3, [r2]
-    ldrsh r5, [r4]
-
-    mov r0, #'T'
+    mov r0, #'\t'
     bl  uart_write_char
 
-    mov	r0, #'E'
+    ldr r0, =accy
+    ldrsh r4, [r0]
+    bl uart_write_digit
+
+    mov r0, #'\t'
     bl  uart_write_char
 
-    mov r0, #'S'
+    ldr r0, =accz
+    ldrsh r4, [r0]
+    bl uart_write_digit
+
+    mov r0, #'\t'
     bl  uart_write_char
 
-    mov r0, #'T'
+    mov r0, #'G'
     bl  uart_write_char
+
+    mov r0, #' '
+    bl  uart_write_char
+
+    ldr r0, =gyrox
+    ldrsh r4, [r0]
+    bl uart_write_digit
+
+    mov r0, #'\t'
+    bl  uart_write_char
+
+    ldr r0, =gyroy
+    ldrsh r4, [r0]
+    bl uart_write_digit
+
+    mov r0, #'\t'
+    bl  uart_write_char
+
+    ldr r0, =gyroz
+    ldrsh r4, [r0]
+    bl uart_write_digit
 
     mov r0, #'\n'
     bl  uart_write_char
-
+    
     b   loop
 
     .align
