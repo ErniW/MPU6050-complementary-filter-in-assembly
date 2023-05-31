@@ -1,4 +1,4 @@
-
+/*
 get_imu_orientation:
 
     push {lr}
@@ -81,6 +81,7 @@ get_imu_orientation:
     //TODO: poszukać wzór na atan 
     //atan^2(a, b) = atan(b/a)
     //atan = 
+    // normalized_atan(x) ~ (b x + x^2) / (1 + 2 b x + x^2)
 
     //s6 accel+angley
     //float accelAngleY = atan2(-ax /sen, sqrt((ay /sen) * (ay /sen) + (az /sen) * (az /sen))) * (180.0 / PI);
@@ -100,7 +101,7 @@ get_imu_orientation:
     //div -ax / s6
     vdiv.f32 s6, s0, s6
 
-    //atan
+    //atan - unfortunately M4 architecture and DSP extension doesnt provide this function.
     vatan.f32 s6, s6
 
     //* rad_to_deg
@@ -143,7 +144,7 @@ get_imu_orientation:
     vadd.f32 s0, s0, s5
     vadd.f32 s1, s1, s6
 
-
+    */
 
     //*roll = 0.98 * (*roll) + 0.02 * (accelAngleX);
     //*pitch = 0.98 * (*pitch) + 0.02 * (accelAngleY);
@@ -173,8 +174,8 @@ get_imu_orientation:
 
     vdiv.f32 s2, s0, s1 */
     
-    pop {lr}
-    bx lr
+    //pop {lr}
+    //bx lr
 
     // vcvt.s32.f32 s0, r1
     // vdiv.f32 s2, 

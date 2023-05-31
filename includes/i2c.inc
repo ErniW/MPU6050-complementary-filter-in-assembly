@@ -50,5 +50,3 @@
 .equ I2C_SR1_TXE,           (1 << 7)
 
 .equ I2C_SR2_BUSY,          (1 << 1)
-
-

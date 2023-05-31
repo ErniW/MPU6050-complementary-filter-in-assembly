@@ -7,7 +7,7 @@ LINKER = ./STM32F446RE/STM32F446RETX_FLASH.ld
 
 SRCS = ./src/main.S
 
-FLAGS = -mthumb
+FLAGS =  -mthumb
 FLAGS += -mcpu=cortex-m4
 FLAGS += -mfloat-abi=hard -mfpu=fpv4-sp-d16
 FLAGS += -g
